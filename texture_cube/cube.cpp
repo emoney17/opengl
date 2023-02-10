@@ -1,41 +1,12 @@
 #include <cstdio>
+#include <fstream>
+#include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-const char* vertex_shader = // create vertex shader in file
-"#version 330 core\n"
-"layout(location = 0) in vec3 vertexPosition_modelspace;\n" // this is the input data
-"layout(location = 1) in vec3 vertexColor;\n"
-"out vec3 fragmentColor;\n" // output data
-"uniform mat4 MVP;\n"
-"void main(){\n"
-"   gl_Position = MVP * vec4(vertexPosition_modelspace, 1);\n"
-"   fragmentColor = vertexColor;\n" // forward to fragment shader
-"}\n";
-
-const char* fragment_shader = // create fragment shader in file
-"#version 330 core\n"
-"in vec3 fragmentColor;\n"
-"out vec3 color;\n"
-"void main(){\n"
-"   color = fragmentColor;\n" // output color and color specified in the vertex shader
-"}\n";
-
-void validateShader(GLuint shader, const char* file)
-{
-    static const unsigned int BUFFER_SIZE = 512;
-    char buffer[BUFFER_SIZE];
-    GLsizei length = 0;
-
-    glGetShaderInfoLog(shader, BUFFER_SIZE, &length, buffer);
-
-    if (length > 0)
-    {
-        printf("Shader %d(%s) compile error: %s\n", shader, (file ? file : ""), buffer);
-    }
-}
+#include <sstream>
+#include "shaders.hpp"
 
 // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
 // A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
@@ -165,32 +136,10 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
-    // create shaders
-    GLuint program_ID = glCreateProgram();
-
-    {
-        //Create vertex shader
-        GLuint shader_VP = glCreateShader(GL_VERTEX_SHADER);
-
-        glShaderSource(shader_VP, 1, &vertex_shader, 0);
-        glCompileShader(shader_VP);
-        validateShader(shader_VP, vertex_shader);
-        glAttachShader(program_ID, shader_VP);
-
-        glDeleteShader(shader_VP);
-    }
-
-    {
-        //Create fragment shader
-        GLuint shader_FP = glCreateShader(GL_FRAGMENT_SHADER);
-
-        glShaderSource(shader_FP, 1, &fragment_shader, 0);
-        glCompileShader(shader_FP);
-        validateShader(shader_FP, fragment_shader);
-        glAttachShader(program_ID, shader_FP);
-
-        glDeleteShader(shader_FP);
-    }
+    Shaders shader;
+    shader.vertex_shader_path = "./vertex.glsl";
+    shader.fragment_shader_path = "./fragment.glsl";
+    GLuint program_ID = shader.generate_shader();
 
     glLinkProgram(program_ID); // link the program
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f); // set the clear color to blue
