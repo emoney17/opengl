@@ -3,6 +3,6 @@ CFLAGS= -Wall -Wextra
 LIBS = -lGL -lglfw -lGLEW -lm
 
 all:
-	$(CC) -o texturecube.o $(CFLAGS) $(LIBS) ./texturecube.cpp ./shaders.cpp
+	$(CC) -o textured_cube.o $(CFLAGS) $(LIBS) ./textured_cube.cpp ./shaders.cpp
 clean:
 	$(RM) *.o
