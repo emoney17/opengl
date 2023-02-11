@@ -41,7 +41,7 @@ GLuint Shaders::generate_shader()
   }
   else
   {
-     printf("Error reading %s", vertex_shader_path);
+     printf("Error reading %s", fragment_shader_path);
   }
 
   const char* vertex_shader = vertex_shader_code.c_str();

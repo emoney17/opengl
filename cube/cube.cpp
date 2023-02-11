@@ -147,7 +147,6 @@ int main(void)
     /*
      * Step 1 generate mvp matrix
      */
-
     // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 Projection = glm::perspective(glm::radians(45.0f),
         4.0f / 3.0f, 1.0f, 100.0f);
@@ -165,7 +164,6 @@ int main(void)
     /*
      * Step 2 give it to glsl
      */
-
     // get handle for our mpv uniform
     // only during initializing
     GLuint MatrixID = glGetUniformLocation(program_ID, "MVP");
