@@ -133,11 +133,6 @@ int main(void)
   glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
   glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-  // GLuint colorbuffer;
-  // glGenBuffers(1, &colorbuffer);
-  // glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-  // glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
-
   Shaders shader;
   shader.vertex_shader_path = "./shader.vert";
   shader.fragment_shader_path = "./shader.frag";
