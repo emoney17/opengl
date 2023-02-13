@@ -1,11 +1,13 @@
 #include <cstdio>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
 #include "../common/read_shaders.h"
 
 int main(void)
 {
-  // ============================= BOILERPLATE
+  // ============================================================ WINDOW
+
   glfwInit();
   if (!glfwInit())
   {
@@ -32,7 +34,8 @@ int main(void)
     fprintf(stderr, "Error initializing glew\n");
     return -1;
   }
-  // ============================= BOILERPLATE
+
+  // ============================================================ WINDOW
 
   Shaders shader;
   shader.vertex_shader_path = "./shader.vert";

@@ -1,25 +1,13 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include <cstdio>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-const char* vertex_shader_source =
-"#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main(){\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\n";
-
-const char* fragment_shader_source =
-"#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main(){\n"
-"   FragColor = vec4(0.5f, 0.0f, 0.0f, 1.0f);\n"
-"}\n";
+#include "../common/read_shaders.h"
 
 int main(void)
 {
-  // ============================= BOILERPLATE
+  // ============================================================ WINDOW
+
   glfwInit();
   if (!glfwInit())
   {
@@ -46,49 +34,15 @@ int main(void)
     fprintf(stderr, "Error initializing glew\n");
     return -1;
   }
-  // ============================= BOILERPLATE
 
-  int success;
-  char infoLog[512];
+  // ============================================================ WINDOW
 
-  // Create shaders and check if compiled successfully
-  unsigned int vertex_shader;
-  vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-  glCompileShader(vertex_shader);
-  glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
-    fprintf(stderr, "Error with vertex shader compilation : %s\n", infoLog);
-  }
+  Shaders shader;
+  shader.vertex_shader_path = "./shader.vert";
+  shader.fragment_shader_path = "./shader.frag";
+  unsigned int shader_program = shader.generate_shader();
 
-  unsigned int fragment_shader;
-  fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-  glCompileShader(fragment_shader);
-  glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
-    fprintf(stderr, "Error with fragment shader compilation : %s\n", infoLog);
-  }
-
-  // Create a shader program with the shaders and check for success
-  unsigned int shader_program;
-  shader_program = glCreateProgram();
-  glAttachShader(shader_program, vertex_shader);
-  glAttachShader(shader_program, fragment_shader);
   glLinkProgram(shader_program);
-  glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-  if (!success)
-  {
-    glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-    fprintf(stderr, "Error linking shader program : %s\n", infoLog);
-  }
-
-  glDeleteShader(vertex_shader);
-  glDeleteShader(fragment_shader);
 
   // Instead write 2 triangles like this
   float vertices[] =
@@ -105,8 +59,7 @@ int main(void)
       1, 2, 3    // second triangle
   };
 
-  // Create Element buffer object
-  // Create VBO and VAO
+  // Create Element buffer object, VAO, AND VBO
   unsigned int VBO, VAO, EBO;
   // Bind VAO first then bind and set vertex buffes, next configure vertex attribs
   glGenVertexArrays(1, &VAO);
@@ -140,7 +93,7 @@ int main(void)
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    // Swap buffers and pollIO events (keys pressed, mouse moved, etc)
+    // Swap buffers and poll IO events (keys pressed, mouse moved, etc)
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
