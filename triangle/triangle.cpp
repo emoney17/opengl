@@ -16,9 +16,7 @@ int main(void)
   glfwMakeContextCurrent(window);
   init.glew_init();
 
-  Shaders shader;
-  shader.vertex_shader_path = "./shader.vert";
-  shader.fragment_shader_path = "./shader.frag";
+  Shaders shader("./shader.frag", "./shader.vert");
   unsigned int shader_program = shader.generate_shader();
 
   glLinkProgram(shader_program);

@@ -7,10 +7,10 @@
 
 class Shaders
 {
-    public:
-        const char* fragment_shader_path;
-        const char* vertex_shader_path;
-
-        void validate_shaders(GLuint shader, const char* file);
-        GLuint generate_shader();
+  const char* fragment_shader_path;
+  const char* vertex_shader_path;
+  public:
+    Shaders(const char* f_path, const char* v_path);
+    void validate_shaders(GLuint shader, const char* file);
+    GLuint generate_shader();
 };

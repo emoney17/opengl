@@ -1,5 +1,11 @@
 #include "read_shaders.h"
 
+Shaders::Shaders(const char* f_path, const char* v_path)
+{
+  fragment_shader_path = f_path;
+  vertex_shader_path = v_path;
+}
+
 void Shaders::validate_shaders(GLuint shader, const char* file)
 {
   static const unsigned int BUFFER_SIZE = 512;
