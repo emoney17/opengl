@@ -35,11 +35,11 @@ int main(void)
   // Now include vertex data with the texture coordinates
   float vertices[] =
   {
-     // positions         // colors          // texture coords
-     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,     // top right
-     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,     // bottom right
-    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,     // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f      // top left
+     // positions         // texture coords
+     0.5f,  0.5f, 0.0f,   1.0f, 1.0f,     // top right
+     0.5f, -0.5f, 0.0f,   1.0f, 0.0f,     // bottom right
+    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,     // bottom left
+    -0.5f,  0.5f, 0.0f,   0.0f, 1.0f      // top left
   };
 
   unsigned int indices[] =
@@ -63,16 +63,12 @@ int main(void)
 
   // Notify opengl of the new vertex format
   // Position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
-  // Color attribute
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
-
   // Texture coordinates attribute
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   //============================================================TEXTURES
 
