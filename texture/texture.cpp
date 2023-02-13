@@ -15,7 +15,7 @@ int main(void)
   Init init;
   init.width = 800;
   init.height = 600;
-  init.title = "SQUARE";
+  init.title = "TEXTURE";
   init.glfw_init();
   GLFWwindow* window = init.create_window();
   glfwMakeContextCurrent(window);

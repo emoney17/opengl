@@ -26,7 +26,7 @@ GLFWwindow* Init::create_window()
   glfwInitHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwInitHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  GLFWwindow* window = glfwCreateWindow(800, 600, "OpenglC", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(800, 600, title, NULL, NULL);
   if (window == NULL)
   {
     fprintf(stderr, "Error creating window\n");
