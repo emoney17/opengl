@@ -1,2 +1,2 @@
 ### Just learning opengl
-(reference)[https://learnopengl.com/]
+[reference](https://learnopengl.com/)
