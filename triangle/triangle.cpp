@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "../common/read_shaders.h"
 
 int main(void)
 {
@@ -33,44 +34,12 @@ int main(void)
   }
   // ============================= BOILERPLATE
 
-  int success;
-  char infoLog[512];
+  Shaders shader;
+  shader.vertex_shader_path = "./shader.vert";
+  shader.fragment_shader_path = "./shader.frag";
+  unsigned int shader_program = shader.generate_shader();
 
-  // Create shaders and check if compiled successfully
-  unsigned int vertex_shader;
-  vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-  glCompileShader(vertex_shader);
-  glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
-    fprintf(stderr, "Error with vertex shader compilation : %s\n", infoLog);
-  }
-
-  unsigned int fragment_shader;
-  fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-  glCompileShader(fragment_shader);
-  glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
-    fprintf(stderr, "Error with fragment shader compilation : %s\n", infoLog);
-  }
-
-  // Create a shader program with the shaders and check for success
-  unsigned int shader_program;
-  shader_program = glCreateProgram();
-  glAttachShader(shader_program, vertex_shader);
-  glAttachShader(shader_program, fragment_shader);
   glLinkProgram(shader_program);
-  glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-  if (!success)
-  {
-    glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-    fprintf(stderr, "Error linking shader program : %s\n", infoLog);
-  }
 
   // Verticies of the triangle
   float verticies[] =
@@ -119,8 +88,6 @@ int main(void)
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteProgram(shader_program);
-  glDeleteShader(vertex_shader);
-  glDeleteShader(fragment_shader);
   glfwTerminate();
 
   return 0;
