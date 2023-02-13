@@ -3,39 +3,18 @@
 #include <GLFW/glfw3.h>
 
 #include "../common/read_shaders.h"
+#include "../common/init.h"
 
 int main(void)
 {
-  // ============================================================ WINDOW
-
-  glfwInit();
-  if (!glfwInit())
-  {
-    fprintf(stderr, "Error initializing glfw\n");
-    return -1;
-  }
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  GLFWwindow* window = glfwCreateWindow(800, 600, "OpenglC", NULL, NULL);
-  if (window == NULL)
-  {
-    fprintf(stderr, "Error creating window\n");
-    glfwTerminate();
-    return -1;
-  }
-
+  Init init;
+  init.width = 800;
+  init.height = 600;
+  init.title = "SQUARE";
+  init.glfw_init();
+  GLFWwindow* window = init.create_window();
   glfwMakeContextCurrent(window);
-  glewInit();
-  if (glewInit() != GLEW_OK)
-  {
-    fprintf(stderr, "Error initializing glew\n");
-    return -1;
-  }
-
-  // ============================================================ WINDOW
+  init.glew_init();
 
   Shaders shader;
   shader.vertex_shader_path = "./shader.vert";
