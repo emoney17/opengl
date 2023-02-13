@@ -105,6 +105,8 @@ int main(void)
   // Afterwards free image data
   stbi_image_free(data);
 
+  //============================================================GAMELOOP
+
   while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS
       && glfwWindowShouldClose(window) == 0)
   {
