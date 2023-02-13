@@ -124,7 +124,7 @@ int main(void)
   data = stbi_load("./konata.png", &width, &height, &nrChannels, 0);
   if (data)
   {
-    // Generate texture from the data as well as the mipmap
+    // Set RGBA instead of just RGB so that we can controll the alpha value in shader.frag
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
   }
