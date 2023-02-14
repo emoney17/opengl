@@ -1,5 +1,12 @@
 #include "init.h"
 
+Init::Init(int w, int h, const char* name)
+{
+    width = w;
+    height = h;
+    title = name;
+}
+
 void Init::glfw_init()
 {
   glfwInit();
