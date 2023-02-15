@@ -86,7 +86,7 @@ int main(void)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
   // Load texture data from file
-  data = stbi_load("./background.jpg", &width, &height, &nrChannels, 0);
+  data = stbi_load("../images/background.jpg", &width, &height, &nrChannels, 0);
   if (data)
   {
     // Generate texture from the data as well as the mipmap
@@ -112,7 +112,7 @@ int main(void)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
   // Load texture data from file
-  data = stbi_load("./konata.png", &width, &height, &nrChannels, 0);
+  data = stbi_load("../images/konata.png", &width, &height, &nrChannels, 0);
   if (data)
   {
     // Set RGBA instead of just RGB so that we can controll the alpha value in shader.frag
