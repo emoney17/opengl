@@ -77,7 +77,7 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    data = stbi_load("./background.jpg", &width, &height, &nrChannels, 0);
+    data = stbi_load("../images/background.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -98,7 +98,7 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    data = stbi_load("./konata.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("../images/konata.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -123,8 +123,6 @@ int main(void)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shader_program);
-
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
@@ -132,12 +130,29 @@ int main(void)
 
         //============================================================TRANSFORMATION
 
-        glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
         glUseProgram(shader_program);
-        unsigned int transform_location = glGetUniformLocation(shader_program, "transform");
-        glUniformMatrix4fv(transform_location, 1, GL_FALSE, glm::value_ptr(transform));
+
+        // Create transformations
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 projection = glm::mat4(1.0f);
+
+        // Rotate the model so it looks like it is laying on the floor
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        // Transate the scene in the reverse direction of where we want to move
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        // Use perspective projections
+        projection = glm::perspective(glm::radians(45.0f), (float)init.width / (float)init.height, 0.1f, 100.0f);
+
+        // Get matrix uniform locations
+        unsigned int modelLoc = glGetUniformLocation(shader_program, "model");
+        unsigned int viewLoc = glGetUniformLocation(shader_program, "view");
+        unsigned int projectionLoc = glGetUniformLocation(shader_program, "projection");
+
+        // Send the matracies to shader (done each frame since transform matricies change a lot)
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         //============================================================TRANSFORMATION
 

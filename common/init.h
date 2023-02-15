@@ -5,11 +5,11 @@
 
 class Init
 {
+  public:
     int width;
     int height;
     const char* title;
 
-  public:
     Init(int w, int h, const char* name);
     void glfw_init();
     void glew_init();
