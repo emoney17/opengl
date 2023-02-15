@@ -12,10 +12,7 @@ int main(void)
 {
   //============================================================WINDOW
 
-  Init init;
-  init.width = 800;
-  init.height = 600;
-  init.title = "TEXTURE";
+  Init init(800, 600, "TEXTURE");
   init.glfw_init();
   GLFWwindow* window = init.create_window();
   glfwMakeContextCurrent(window);
