@@ -151,13 +151,16 @@ int main(void)
     glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0);
     glUniform1i(glGetUniformLocation(shader_program, "texture2"), 1);
 
+    // Enable depth testing so that pixels dont get written over others
+    glEnable(GL_DEPTH_TEST);
+
     //============================================================GAMELOOP
 
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS
         && glfwWindowShouldClose(window) == 0)
     {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
