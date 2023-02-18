@@ -10,7 +10,7 @@ uniform mat4 projection;
 
 void main()
 {
-    // Read the multiplication from right to left
+	// Read the multiplication from right to left
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
-	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
+	TexCoord = vec2(aTexCoord.x, 1.0 - aTexCoord.y);
 }
