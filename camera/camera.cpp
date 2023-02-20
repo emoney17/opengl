@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstdio>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,11 +12,21 @@
 #include "../common/read_shaders.h"
 #include "../common/init.h"
 
+// Camera
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+// Timing
+float deltaTime = 0.0f; // Time between current frame and last frame
+float lastFrame = 0.0f;
+
+void processInput(GLFWwindow* window);
 int main(void)
 {
     //============================================================WINDOW
 
-    Init init(800, 600, "TRANSFORM");
+    Init init(800, 600, "CAMERA");
     init.glfw_init();
     GLFWwindow* window = init.create_window();
     glfwMakeContextCurrent(window);
@@ -157,29 +168,6 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
 
-    //============================================================CAMERA
-
-    // Set camera position the same as before
-    //glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-
-    //// Set camera direction (is in reverse)
-    //// Subtracting the camera position vector from the scenes origin vector results in the direction we want
-    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-
-    //// Right axis, right vector to represent the positive x axis of the camera space
-    //glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    //glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-
-    //// Up axis for positive y axis; take cross product of right and direction vec
-    //glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
-    //// Create a look at matrix, creates a matrix with these 3 axes to create a coordinate space
-    //glm::mat4 view;
-    //view = glm::lookAt (glm::vec3(0.0f, 0.0f, 3.0f),
-    //			glm::vec3(0.0f, 0.0f, 3.0f),
-    //			glm::vec3(0.0f, 0.0f, 3.0f));
-
     //============================================================GAMELOOP
 
     // Set up projection matrix to shader, it rarely changes
@@ -188,9 +176,16 @@ int main(void)
     unsigned int projectionLoc = glGetUniformLocation(shader_program, "projection");
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS
-        && glfwWindowShouldClose(window) == 0)
+    while (!glfwWindowShouldClose(window))
     {
+	// Per-frame logic
+	float currentFrame = static_cast<float>(glfwGetTime());
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+	
+        // Process user input function
+        processInput(window);
+      
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -204,10 +199,7 @@ int main(void)
         //============================================================CAMERA
 
 	glm::mat4 view = glm::mat4(1.0f);
-	float radius = 10.0f;
-	float camX = static_cast<float>(sin(glfwGetTime()) * radius);
-	float camZ = static_cast<float>(cos(glfwGetTime()) * radius);
-	view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 	unsigned int viewLoc = glGetUniformLocation(shader_program, "view");
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -237,4 +229,21 @@ int main(void)
     glDeleteProgram(shader_program);
     glfwTerminate();
     return 0;
+}
+
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, true);
+
+    // For camera
+    float cameraSpeed = static_cast<float>(2.5 * deltaTime); //adjust accordingly
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
