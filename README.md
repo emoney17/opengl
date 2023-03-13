@@ -1,5 +1,5 @@
 ### Testing Demos
-Go clone the repo and ```make``` in any of the directories
+Clone the repo and run ```make``` in any of the directories to build
 
 ![](https://github.com/emoney17/opengl/blob/master/demo/output.gif)
 
